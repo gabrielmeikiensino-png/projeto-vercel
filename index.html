@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>CTRL NACHOS | Cardápio Mexicano</title>
+
+  <style>
+    /* =========================
+       RESET
+    ========================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #fffaf0;
+      color: #211a14;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    /* =========================
+       CORES
+    ========================== */
+    :root {
+      --red: #d62828;
+      --dark-red: #9d1717;
+      --yellow: #fcbf49;
+      --green: #2a9d5b;
+      --dark: #18120f;
+      --cream: #fffaf0;
+      --white: #ffffff;
+      --gray: #777;
+    }
+
+    /* =========================
+       HEADER
+    ========================== */
+    header {
+      background:
+        linear-gradient(rgba(24,18,15,.82), rgba(24,18,15,.82)),
+        radial-gradient(circle at 20% 20%, #d62828, transparent 35%),
+        radial-gradient(circle at 80% 80%, #2a9d5b, transparent 35%);
+
+      color: white;
+      min-height: 430px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: "🌵";
+      position: absolute;
+      left: 5%;
+      bottom: 20px;
+      font-size: 100px;
+      opacity: .18;
+    }
+
+    header::after {
+      content: "🌶️";
+      position: absolute;
+      right: 6%;
+      top: 30px;
+      font-size: 90px;
+      opacity: .18;
+    }
+
+    .hero {
+      max-width: 800px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .logo {
+      width: 115px;
+      height: 115px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      background: var(--yellow);
+      border: 8px solid var(--red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      box-shadow: 0 10px 35px rgba(0,0,0,.3);
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 9vw, 6.5rem);
+      font-weight: 1000;
+      letter-spacing: -5px;
+      line-height: .9;
+      color: var(--yellow);
+      text-shadow: 5px 5px 0 var(--red);
+    }
+
+    .hero h2 {
+      font-size: 1.4rem;
+      margin-top: 22px;
+      color: #fff;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    .hero p {
+      margin: 20px auto 0;
+      max-width: 600px;
+      color: #eee;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .hero-btn {
+      display: inline-block;
+      margin-top: 28px;
+      padding: 14px 28px;
+      background: var(--red);
+      color: white;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: .25s;
+      box-shadow: 0 5px 0 var(--dark-red);
+    }
+
+    .hero-btn:hover {
+      transform: translateY(-3px);
+      background: #ef3030;
+    }
+
+    /* =========================
+       NAVEGAÇÃO
+    ========================== */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--white);
+      border-bottom: 3px solid var(--yellow);
+      box-shadow: 0 3px 15px rgba(0,0,0,.08);
+    }
+
+    .nav-content {
+      max-width: 1200px;
+      margin: auto;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow-x: auto;
+    }
+
+    .nav-content::-webkit-scrollbar {
+      display: none;
+    }
+
+    .category-btn {
+      flex-shrink: 0;
+      border: 2px solid #eee;
+      background: white;
+      padding: 9px 16px;
+      border-radius: 30px;
+      font-weight: bold;
+      color: #333;
+      transition: .2s;
+    }
+
+    .category-btn:hover,
+    .category-btn.active {
+      background: var(--red);
+      border-color: var(--red);
+      color: white;
+    }
+
+    /* =========================
+       CONTEÚDO
+    ========================== */
+    main {
+      max-width: 1200px;
+      margin: auto;
+      padding: 50px 20px 120px;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    .section-title span {
+      color: var(--red);
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: .8rem;
+    }
+
+    .section-title h2 {
+      margin-top: 8px;
+      font-size: 2.3rem;
+    }
+
+    .section-title p {
+      margin-top: 10px;
+      color: var(--gray);
+    }
+
+    /* =========================
+       CARDS
+    ========================== */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(50,30,10,.08);
+      border: 1px solid #f0e5d3;
+      transition: .3s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 15px 35px rgba(50,30,10,.15);
+    }
+
+    .card-image {
+      height: 190px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 85px;
+      position: relative;
+      background:
+        linear-gradient(135deg, #fff0bd, #ffd36a);
+    }
+
+    .card:nth-child(2n) .card-image {
+      background:
+        linear-gradient(135deg, #ffd6d6, #f98d8d);
+    }
+
+    .card:nth-child(3n) .card-image {
+      background:
+        linear-gradient(135deg, #d6f3dc, #83d79d);
+    }
+
+    .badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--red);
+      color: white;
+      font-size: .7rem;
+      font-weight: bold;
+      padding: 6px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+
+    .card-content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      color: #777;
+      line-height: 1.5;
+      font-size: .9rem;
+      flex: 1;
+    }
+
+    .card-bottom {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .price {
+      color: var(--red);
+      font-size: 1.3rem;
+      font-weight: 900;
+    }
+
+    .add-btn {
+      border: 0;
+      background: var(--dark);
+      color: white;
+      padding: 10px 15px;
+      border-radius: 10px;
+      font-weight: bold;
+      transition: .2s;
+    }
+
+    .add-btn:hover {
+      background: var(--red);
+    }
+
+    /* =========================
+       SOBRE
+    ========================== */
+    .about {
+      margin-top: 80px;
+      padding: 50px 30px;
+      background: var(--dark);
+      color: white;
+      border-radius: 25px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about::before {
+      content: "🌮 🌶️ 🌵 🫘";
+      position: absolute;
+      top: 10px;
+      left: 0;
+      right: 0;
+      opacity: .08;
+      font-size: 70px;
+    }
+
+    .about h2 {
+      position: relative;
+      color: var(--yellow);
+      font-size: 2.2rem;
+      margin-bottom: 15px;
+    }
+
+    .about p {
+      position: relative;
+      max-width: 700px;
+      margin: auto;
+      line-height: 1.7;
+      color: #ddd;
+    }
+
+    /* =========================
+       CARRINHO
+    ========================== */
+    .cart-button {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 200;
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      border: 4px solid white;
+      background: var(--red);
+      color: white;
+      font-size: 25px;
+      box-shadow: 0 8px 25px rgba(0,0,0,.25);
+    }
+
+    .cart-count {
+      position: absolute;
+      right: -3px;
+      top: -5px;
+      background: var(--yellow);
+      color: var(--dark);
+      width: 23px;
+      height: 23px;
+      border-radius: 50%;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .cart-panel {
+      position: fixed;
+      right: -420px;
+      top: 0;
+      width: min(400px, 100%);
+      height: 100vh;
+      background: white;
+      z-index: 300;
+      box-shadow: -10px 0 40px rgba(0,0,0,.2);
+      transition: .35s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cart-panel.open {
+      right: 0;
+    }
+
+    .cart-header {
+      background: var(--dark);
+      color: white;
+      padding: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-header h2 {
+      color: var(--yellow);
+    }
+
+    .close-cart {
+      background: transparent;
+      border: 0;
+      color: white;
+      font-size: 25px;
+    }
+
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .empty-cart {
+      text-align: center;
+      color: #999;
+      padding: 50px 20px;
+    }
+
+    .cart-item {
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .cart-item-info strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .cart-item-info small {
+      color: #888;
+    }
+
+    .remove-item {
+      border: 0;
+      background: transparent;
+      color: var(--red);
+      font-size: 18px;
+    }
+
+    .cart-footer {
+      padding: 20px;
+      border-top: 1px solid #eee;
+    }
+
+    .total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .whatsapp-btn {
+      width: 100%;
+      border: 0;
+      background: #25D366;
+      color: white;
+      padding: 15px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 1rem;
+    }
+
+    .whatsapp-btn:hover {
+      background: #1ebc59;
+    }
+
+    /* =========================
+       FOOTER
+    ========================== */
+    footer {
+      background: #100c09;
+      color: white;
+      text-align: center;
+      padding: 35px 20px;
+    }
+
+    footer strong {
+      color: var(--yellow);
+    }
+
+    footer p {
+      margin-top: 8px;
+      color: #aaa;
+      font-size: .9rem;
+    }
+
+    /* =========================
+       RESPONSIVO
+    ========================== */
+    @media (max-width: 900px) {
+      .menu-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      header {
+        min-height: 390px;
+      }
+
+      .hero h1 {
+        letter-spacing: -3px;
+      }
+
+      .hero h2 {
+        font-size: 1rem;
+        letter-spacing: 2px;
+      }
+
+      main {
+        padding: 35px 15px 100px;
+      }
+
+      .menu-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .card-image {
+        height: 170px;
+      }
+
+      .about {
+        padding: 40px 20px;
+      }
+
+      .about h2 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================
+       HERO
+  ========================== -->
+  <header>
+    <div class="hero">
+
+      <div class="logo">🌮</div>
+
+      <h1>CTRL<br>NACHOS</h1>
+
+      <h2>Comida mexicana • Sabor sem Ctrl+Z</h2>
+
+      <p>
+        Nachos crocantes, tacos recheados, burritos e muito mais.
+        Uma explosão de sabores mexicanos para você matar a fome.
+      </p>
+
+      <a href="#cardapio" class="hero-btn">
+        VER CARDÁPIO 🌶️
+      </a>
+
+    </div>
+  </header>
+
+  <!-- =========================
+       NAVEGAÇÃO
+  ========================== -->
+  <nav>
+    <div class="nav-content">
+
+      <button class="category-btn active" onclick="filterMenu('todos', this)">
+        🌮 Todos
+      </button>
+
+      <button class="category-btn" onclick="filterMenu('nachos', this)">
+        🧀 Nachos
+      </button>
+
+      <button class="category-btn" onclick="filterMenu('tacos', this)">
+        🌮 Tacos
+      </button>
+
+      <button class="category-btn" onclick="filterMenu('burritos', this)">
+        🌯 Burritos
+      </button>
+
+      <button class="category-btn" onclick="filterMenu('quesadillas', this)">
+        🫓 Quesadillas
+      </button>
+
+      <button class="category-btn" onclick="filterMenu('bebidas', this)">
+        🥤 Bebidas
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- =========================
+       CARDÁPIO
+  ========================== -->
+  <main id="cardapio">
+
+    <div class="section-title">
+      <span>Nosso cardápio</span>
+      <h2>Escolha sua próxima obsessão 🌮</h2>
+      <p>Prepare-se para comer bem. E comer muito.</p>
+    </div>
+
+    <div class="menu-grid">
+
+      <!-- NACHOS -->
+      <article class="card" data-category="nachos">
+        <div class="card-image">
+          <span class="badge">Mais pedido</span>
+          🧀🌮
+        </div>
+
+        <div class="card-content">
+          <h3>Nachos CTRL</h3>
+
+          <p>
+            Nachos crocantes, cheddar cremoso, carne temperada,
+            jalapeño, tomate, cebola roxa e molho especial da casa.
+          </p>
+
+          <div class="card-bottom">
+            <span class="price">R$ 32,90</span>
+
+            <button
+              class="add-btn"
+              onclick="addToCart('Nachos CTRL', 32.90)">
+              + Adicionar
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" data-category="nachos">
+        <div class="card-image">
+          🌶️🧀
+        </div>
+
+        <div class="card-content">
+          <h3>Nachos Apimentados</h3>
+
+          <p>
+            Nachos, cheddar, carne desfiada, jalapeño,
+            pimenta mexicana e molho picante.
+          </p>
+
+          <div class="card-bottom">
+            <span class="price">R$ 29,90</span>
+
+            <button
+              class="add-btn"
+              onclick="addToCart('Nachos Apimentados', 29.90)">
+              + Adicionar
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- TACOS -->
+      <article class="card" data-category="tacos">
+        <div class="card-image">
+          <span class="badge">Favorito</span>
+          🌮🥩
+        </div>
+
+        <div class="card-content">
+          <h3>Taco de Carne</h3>
+
+          <p>
+            Tortilla crocante, carne temperada, queijo,
+            alface, tomate e molho mexicano.
+          </p>
+
+          <div class="card-bottom">
+            <span class="price">R$ 12,90</span>
+
+            <button
+              class="add-btn"
+              onclick="addToCart('Taco de Carne', 12.90)">
+              + Adicionar
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" data-category="tacos">
+        <div class="card-image">
+          🐔🌮
+        </div>
+
+        <div class="card-content">
+          <h3>Taco de Frango</h3>
+
+          <p>
+            Frango grelhado temperado, queijo, pico de gallo,
+            alface e molho especial.
+          </p>
+
+          <div class="card-bottom">
+            <span class="price">R$ 11,90</span>
+
+            <button
+              class="add-btn"
+              onclick="addToCart('Taco de Frango', 11.90)">
+              + Adicionar
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- BURRITOS -->
+      <article class="card" data-category="burritos">
+        <div class="card-image">
+          🌯🥩
+        </div>
+
+        <div class="card-content">
+          <h3>Burrito Mexicano</h3>
+
+          <p>
+            Tortilla de trigo recheada com carne, arroz mexicano,
+            feijão, queijo, alface e molho da casa.
+          </p>
+
+          <div class="card-bottom">
+            <span class="price">R$ 27,90</span>
+
+            <button
+              class="add-btn"
+              onclick="addToCart('Burrito Mexicano', 27.90)">
+              + Adicionar
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" data-category="burritos">
+        <div class="card-image">
+          🌯🐔
+        </div>
+
+        <div class="card-content">
+          <h3>Burrito de Frango</h3>
+
+          <p>
+            Frango, arroz, feijão, queijo, milho, tomate,
+            cebola e molho cremoso.
+          </p>
+
+          <div class="card-bottom">
+            <span class="price">R$ 25,90</span>
+
+            <button
+              class="add-btn"
+              onclick="addToCart('Burrito de Frango', 25.90)">
+              + Adicionar
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- QUESADILLAS -->
+      <article class="card" data-category="quesadillas">
+        <div class="card-image">
+          🫓🧀
+        </div>
+
+        <div class="card-content">
+          <h3>Quesadilla de Queijo</h3>
+
+          <p>
+            Tortilla douradinha recheada com muito queijo derretido
+            e molho mexicano.
+          </p>
+
+          <div class="card-bottom">
+            <span class="price">R$ 21,90</span>
+
+            <button
+              class="add-btn"
+              onclick="addToCart('Quesadilla de Queijo', 21.90)">
+              + Adicionar
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" data-category="quesadillas">
+        <div class="card-image">
+          🫓🥩🧀
+        </div>
+
+        <div class="card-content">
+          <h3>Quesadilla de Carne</h3>
+
+          <p>
+            Carne temperada, queijo derretido, cebola caramelizada
+            e molho especial.
+          </p>
+
+          <div class="card-bottom">
+            <span class="price">R$ 25,90</span>
+
+            <button
+              class="add-btn"
+              onclick="addToCart('Quesadilla de Carne', 25.90)">
+              + Adicionar
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- BEBIDAS -->
+      <article class="card" data-category="bebidas">
+        <div class="card-image">
+          🥤🍋
+        </div>
+
+        <div class="card-content">
+          <h3>Limonada Mexicana</h3>
+
+          <p>
+            Limonada natural refrescante com limão,
+            gelo e um toque especial da casa.
+          </p>
+
+          <div class="card-bottom">
+            <span class="price">R$ 9,90</span>
+
+            <button
+              class="add-btn"
+              onclick="addToCart('Limonada Mexicana', 9.90)">
+              + Adicionar
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" data-category="bebidas">
+        <div class="card-image">
+          🥤🧊
+        </div>
+
+        <div class="card-content">
+          <h3>Refrigerante</h3>
+
+          <p>
+            Refrigerante gelado para acompanhar
+            sua experiência CTRL NACHOS.
+          </p>
+
+          <div class="card-bottom">
+            <span class="price">R$ 7,00</span>
+
+            <button
+              class="add-btn"
+              onclick="addToCart('Refrigerante', 7.00)">
+              + Adicionar
+            </button>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- SOBRE -->
+    <section class="about">
+
+      <h2>CTRL NACHOS 🌵</h2>
+
+      <p>
+        Aqui a gente acredita que comida mexicana precisa ser
+        divertida, caprichada e cheia de sabor. Nosso objetivo é
+        transformar cada pedido em uma experiência — do primeiro
+        nacho ao último taco.
+      </p>
+
+    </section>
+
+  </main>
+
+  <!-- =========================
+       BOTÃO CARRINHO
+  ========================== -->
+  <button class="cart-button" onclick="openCart()" aria-label="Abrir carrinho">
+    🛒
+    <span class="cart-count" id="cartCount">0</span>
+  </button>
+
+  <!-- =========================
+       CARRINHO
+  ========================== -->
+  <aside class="cart-panel" id="cartPanel">
+
+    <div class="cart-header">
+      <h2>Seu pedido 🌮</h2>
+
+      <button class="close-cart" onclick="closeCart()">
+        ✕
+      </button>
+    </div>
+
+    <div class="cart-items" id="cartItems">
+      <div class="empty-cart">
+        <div style="font-size: 50px;">🌮</div>
+        <p>Seu carrinho está vazio.</p>
+        <br>
+        <small>Adicione alguma coisa deliciosa!</small>
+      </div>
+    </div>
+
+    <div class="cart-footer">
+
+      <div class="total">
+        <span>Total</span>
+        <span id="cartTotal">R$ 0,00</span>
+      </div>
+
+      <button class="whatsapp-btn" onclick="sendWhatsApp()">
+        📲 Pedir pelo WhatsApp
+      </button>
+
+    </div>
+
+  </aside>
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+  <footer>
+    <strong>CTRL NACHOS 🌮</strong>
+
+    <p>
+      Sabor mexicano para apertar o botão da fome.
+    </p>
+
+    <p>
+      © 2026 CTRL NACHOS — Todos os direitos reservados.
+    </p>
+  </footer>
+
+
+  <script>
+
+    /* ==========================================
+       CONFIGURAÇÃO
+    ========================================== */
+
+    // TROQUE PELO WHATSAPP DO SEU RESTAURANTE.
+    // Coloque o código do país + DDD + número.
+    // Exemplo: 5581999999999
+
+    const WHATSAPP = "5511965393906";
+
+
+    /* ==========================================
+       CARRINHO
+    ========================================== */
+
+    let cart = [];
+
+
+    function addToCart(name, price) {
+
+      const existingItem = cart.find(item => item.name === name);
+
+      if (existingItem) {
+        existingItem.quantity++;
+      } else {
+        cart.push({
+          name: name,
+          price: price,
+          quantity: 1
+        });
+      }
+
+      updateCart();
+
+      // Abre o carrinho automaticamente
+      openCart();
+    }
+
+
+    function removeFromCart(index) {
+
+      if (cart[index].quantity > 1) {
+        cart[index].quantity--;
+      } else {
+        cart.splice(index, 1);
+      }
+
+      updateCart();
+    }
+
+
+    function updateCart() {
+
+      const cartItems = document.getElementById("cartItems");
+      const cartCount = document.getElementById("cartCount");
+      const cartTotal = document.getElementById("cartTotal");
+
+      let total = 0;
+      let quantity = 0;
+
+      cart.forEach(item => {
+        total += item.price * item.quantity;
+        quantity += item.quantity;
+      });
+
+      cartCount.textContent = quantity;
+
+      cartTotal.textContent = formatPrice(total);
+
+
+      if (cart.length === 0) {
+
+        cartItems.innerHTML = `
+          <div class="empty-cart">
+            <div style="font-size: 50px;">🌮</div>
+            <p>Seu carrinho está vazio.</p>
+            <br>
+            <small>Adicione alguma coisa deliciosa!</small>
+          </div>
+        `;
+
+        return;
+      }
+
+
+      cartItems.innerHTML = cart.map((item, index) => {
+
+        const subtotal = item.price * item.quantity;
+
+        return `
+          <div class="cart-item">
+
+            <div class="cart-item-info">
+
+              <strong>
+                ${item.quantity}x ${item.name}
+              </strong>
+
+              <small>
+                ${formatPrice(subtotal)}
+              </small>
+
+            </div>
+
+            <button
+              class="remove-item"
+              onclick="removeFromCart(${index})"
+              title="Remover">
+              ✕
+            </button>
+
+          </div>
+        `;
+
+      }).join("");
+    }
+
+
+    function formatPrice(value) {
+
+      return value.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+      });
+
+    }
+
+
+    /* ==========================================
+       ABRIR / FECHAR CARRINHO
+    ========================================== */
+
+    function openCart() {
+
+      document
+        .getElementById("cartPanel")
+        .classList.add("open");
+
+    }
+
+
+    function closeCart() {
+
+      document
+        .getElementById("cartPanel")
+        .classList.remove("open");
+
+    }
+
+
+    /* ==========================================
+       FILTRO DO CARDÁPIO
+    ========================================== */
+
+    function filterMenu(category, button) {
+
+      const cards = document.querySelectorAll(".card");
+      const buttons = document.querySelectorAll(".category-btn");
+
+      buttons.forEach(btn => {
+        btn.classList.remove("active");
+      });
+
+      button.classList.add("active");
+
+
+      cards.forEach(card => {
+
+        const cardCategory = card.dataset.category;
+
+        if (
+          category === "todos" ||
+          cardCategory === category
+        ) {
+
+          card.style.display = "flex";
+
+        } else {
+
+          card.style.display = "none";
+
+        }
+
+      });
+
+    }
+
+
+    /* ==========================================
+       WHATSAPP
+    ========================================== */
+
+    function sendWhatsApp() {
+
+      if (cart.length === 0) {
+
+        alert("Adicione algum item ao pedido primeiro! 🌮");
+
+        return;
+      }
+
+
+      let message = "🌮 *NOVO PEDIDO — CTRL NACHOS* 🌮\n\n";
+
+      let total = 0;
+
+
+      cart.forEach(item => {
+
+        const subtotal = item.price * item.quantity;
+
+        total += subtotal;
+
+        message +=
+          `• ${item.quantity}x ${item.name} — ${formatPrice(subtotal)}\n`;
+
+      });
+
+
+      message += `\n💰 *TOTAL: ${formatPrice(total)}*`;
+
+      message += "\n\nOlá! Gostaria de fazer este pedido. 🌶️";
+
+
+      const url =
+        "https://wa.me/" +
+        WHATSAPP +
+        "?text=" +
+        encodeURIComponent(message);
+
+
+      window.open(url, "_blank");
+
+    }
+
+
+    /* ==========================================
+       INICIALIZAÇÃO
+    ========================================== */
+
+    updateCart();
+
+  </script>
+
+</body>
+</html>
